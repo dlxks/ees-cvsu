@@ -2,15 +2,18 @@
 
 namespace App\Traits;
 
-trait HasCan {
+trait HasCan
+{
     public function getCanAttribute()
     {
-        $currentUser = request()->user();
+        $authUser = request()->user();
 
-        return [
-            'view' => $currentUser->can('view', $this),
-            'update' => $currentUser->can('update', $this),
-            'delete' => $currentUser->can('delete', $this),
-        ];
+        if ($authUser) {
+            return [
+                'view' => $authUser->can('view', $this),
+                'update' => $authUser->can('update', $this),
+                'delete' => $authUser->can('delete', $this),
+            ];
+        }
     }
 }

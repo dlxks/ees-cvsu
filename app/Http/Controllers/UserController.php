@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -12,15 +13,21 @@ class UserController extends Controller
     {
         $this->authorizeResource(User::class);
     }
+
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return Inertia::render('User/Index', compact('users'));
+        $queries = ['search'];
+
+        return Inertia::render('User/Index', [
+            'users' => User::filter($request->only($queries))->paginate()->withQueryString(),
+            'filters' => $request->all($queries),
+        ]);
     }
 
     /**
@@ -52,7 +59,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Inertia::render('User/Show', compact('user'));
+        return Inertia::render('User/Show', ['manageUser' => $user]);
     }
 
     /**
@@ -63,7 +70,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render('User/Edit', compact('user'));
+        return Inertia::render('User/Edit', ['manageUser' => $user]);
     }
 
     /**
@@ -75,12 +82,20 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $authUser = $request->user();
+
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string',
             'email' => 'required|email',
+            'role' => 'required|string',
         ]);
 
         $user->update($request->only('name', 'email'));
+
+        if ($authUser->hasRole('admin')) {
+            $user->role = $request->role;
+            $user->save();
+        }
 
         return back();
     }

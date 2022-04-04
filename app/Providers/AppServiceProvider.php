@@ -26,9 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Bypass Policy
-        Gate::before( function (User $user, $ability)
-        {
-            if ($user->checkRole('admin')) {
+        Gate::before(function (User $user) {
+            if ($user->hasRole('admin')) {
                 return true;
             }
         });
