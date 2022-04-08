@@ -21414,7 +21414,9 @@ __webpack_require__.r(__webpack_exports__);
     });
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.watchEffect)(function () {
       var query = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(form);
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.replace(route("posts.index", Object.keys(query).length ? query : {}));
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.get(route("posts.index", Object.keys(query).length ? query : {}), {}, {
+        preserveState: true
+      });
     });
 
     var deletePost = function deletePost(postId) {
@@ -22281,7 +22283,9 @@ __webpack_require__.r(__webpack_exports__);
     });
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.watchEffect)(function () {
       var query = (0,lodash__WEBPACK_IMPORTED_MODULE_1__.pickBy)(form);
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.replace(route("users.index", Object.keys(query).length ? query : {}));
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.get(route("users.index", Object.keys(query).length ? query : {}), {}, {
+        preserveState: true
+      });
     });
     return {
       form: form

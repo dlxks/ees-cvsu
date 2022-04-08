@@ -149,7 +149,9 @@ export default {
     watchEffect(() => {
       const query = pickBy(form);
 
-      Inertia.replace(route("posts.index", Object.keys(query).length ? query : {}));
+      Inertia.get(route("posts.index", Object.keys(query).length ? query : {}),
+        {},
+        { preserveState: true });
     });
 
     const deletePost = (postId) => {

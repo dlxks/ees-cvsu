@@ -159,7 +159,11 @@ export default {
     watchEffect(() => {
       const query = pickBy(form);
 
-      Inertia.replace(route("users.index", Object.keys(query).length ? query : {}));
+      Inertia.get(
+        route("users.index", Object.keys(query).length ? query : {}),
+        {},
+        { preserveState: true }
+      );
     });
 
     return { form };
